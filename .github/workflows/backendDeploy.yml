@@ -3,6 +3,10 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
+      
 jobs:
   FTP-Deploy-Action:
     name: FTP-Deploy-Action
