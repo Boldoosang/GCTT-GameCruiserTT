@@ -42,4 +42,4 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: gctt.justinbaldeo.com/
-          local-dir: ./frontend/build/
+          local-dir: ./frontend/dist/
