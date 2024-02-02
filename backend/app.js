@@ -5,7 +5,13 @@ import cors from "cors";
 
 const app = express();
 
-app.use(cors());
+const corsOptions = {
+  origin: "https://gctt.justinbaldeo.com",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 import userRoutes from "./routes/user.js";
