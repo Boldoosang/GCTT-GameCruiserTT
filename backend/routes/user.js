@@ -1,6 +1,6 @@
-import express from "express";
+const express = require("express");
 
-import {
+const {
   login,
   signup,
   addToWishlist,
@@ -10,7 +10,7 @@ import {
   removeFromWishlist,
   authenticateToken,
   getWishlistItem,
-} from "../controllers/user.js";
+} = require("../controllers/user.js");
 
 const router = express.Router();
 
@@ -21,4 +21,4 @@ router.get("/wishlist/:gameId", authenticateToken, getWishlistItem);
 router.get("/wishlist", authenticateToken, getWishlist);
 router.delete("/wishlist", authenticateToken, removeFromWishlist);
 
-export default router;
+module.exports = router;

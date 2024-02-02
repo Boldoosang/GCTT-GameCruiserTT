@@ -1,8 +1,8 @@
-import express from "express";
-import { errorPage } from "../controllers/error.js";
+const express = require("express");
+const { errorPage } = require("../controllers/error.js");
 
 const router = express.Router();
 
 router.use(errorPage);
 
-export default router;
+module.exports = router;

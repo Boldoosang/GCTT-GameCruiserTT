@@ -1,17 +1,17 @@
-import { body, validationResult } from "express-validator";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import { User } from "../models/user.js";
-import { JWT_SECRET } from "../config/config.js";
+const { body, validationResult } = require("express-validator");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const { User } = require("../models/user.js");
+const { JWT_SECRET } = require("../config/config.js");
 
-export function authenticateToken(req, res, next) {
+function authenticateToken(req, res, next) {
   let token = req.headers.authorization;
   token = token.split(" ")[1];
   if (!token) {
     return res.status(401).json({ message: "Authorization token is missing" });
   }
 
-  jwt.verify(token, process.env.JWT_SECRET || JWT_SECRET, (err, user) => {
+  jwt.verify(token, JWT_SECRET, (err, user) => {
     if (err) {
       return res.status(422).json({ message: "Your session has expired." });
     }
@@ -21,7 +21,7 @@ export function authenticateToken(req, res, next) {
   });
 }
 
-export const registrationValidator = [
+const registrationValidator = [
   body("email").isEmail().normalizeEmail().withMessage("Invalid email address"),
 
   body("password")
@@ -40,12 +40,12 @@ export const registrationValidator = [
     .withMessage("You must agree to the terms of service"),
 ];
 
-export const loginValidator = [
+const loginValidator = [
   body("email").isEmail().normalizeEmail().withMessage("Invalid email address"),
   body("password").notEmpty().withMessage("Please enter a password"),
 ];
 
-export async function signup(req, res, next) {
+async function signup(req, res, next) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res
@@ -76,7 +76,7 @@ export async function signup(req, res, next) {
   }
 }
 
-export async function login(req, res, next) {
+async function login(req, res, next) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res
@@ -108,7 +108,7 @@ export async function login(req, res, next) {
         email: userExists.email,
         id: userExists._id,
       },
-      process.env.JWT_SECRET || JWT_SECRET,
+      JWT_SECRET,
       { expiresIn: "1h" }
     );
 
@@ -119,7 +119,7 @@ export async function login(req, res, next) {
   }
 }
 
-export function addToWishlist(req, res, next) {
+function addToWishlist(req, res, next) {
   User.findOne({ email: req.user.email })
     .then((user) => {
       let gameId;
@@ -156,7 +156,7 @@ export function addToWishlist(req, res, next) {
     });
 }
 
-export function removeFromWishlist(req, res, next) {
+function removeFromWishlist(req, res, next) {
   User.findOne({ email: req.user.email })
     .then((user) => {
       let gameId;
@@ -188,7 +188,7 @@ export function removeFromWishlist(req, res, next) {
     });
 }
 
-export function getWishlist(req, res, next) {
+function getWishlist(req, res, next) {
   User.findOne({ email: req.user.email })
     .then((user) => {
       if (!user) {
@@ -205,7 +205,7 @@ export function getWishlist(req, res, next) {
     });
 }
 
-export function getWishlistItem(req, res, next) {
+function getWishlistItem(req, res, next) {
   const gameId = req.params.gameId;
   User.findOne({
     email: req.user.email,
@@ -234,3 +234,13 @@ export function getWishlistItem(req, res, next) {
       return res.status(404).json({ message: "User not found" });
     });
 }
+
+module.exports.authenticateToken = authenticateToken;
+module.exports.registrationValidator = registrationValidator;
+module.exports.loginValidator = loginValidator;
+module.exports.removeFromWishlist = removeFromWishlist;
+module.exports.getWishlist = getWishlist;
+module.exports.getWishlistItem = getWishlistItem;
+module.exports.addToWishlist = addToWishlist;
+module.exports.login = login;
+module.exports.signup = signup;

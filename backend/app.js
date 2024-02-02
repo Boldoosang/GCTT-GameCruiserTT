@@ -1,27 +1,27 @@
-import express from "express";
-import mongoose from "mongoose";
-import { MONGO_URI } from "./config/config.js";
-import cors from "cors";
+const express = require("express");
+const mongoose = require("mongoose");
+const { MONGO_URI } = require("./config/config.js");
+const cors = require("cors");
 
 const app = express();
 
 const corsOptions = {
-  origin: "*",
+  origin: "https://gctt.justinbaldeo.com",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
 };
 
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 
-import userRoutes from "./routes/user.js";
-import errorRoutes from "./routes/error.js";
+const userRoutes = require("./routes/user.js");
+const errorRoutes = require("./routes/error.js");
 
 app.use("/user", userRoutes);
 app.use(errorRoutes);
 
 mongoose
-  .connect(process.env.MONGO_URL || MONGO_URI, { useNewUrlParser: true })
+  .connect(MONGO_URI)
   .then(() => {
     console.log("Connected to MongoDB");
     app.listen(3000, () => console.log("Server running on port 3000"));
