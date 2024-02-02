@@ -15,7 +15,7 @@ app.use("/user", userRoutes);
 app.use(errorRoutes);
 
 mongoose
-  .connect(MONGO_URI, { useNewUrlParser: true })
+  .connect(process.env.MONGO_URL || MONGO_URI, { useNewUrlParser: true })
   .then(() => {
     console.log("Connected to MongoDB");
     app.listen(3000, () => console.log("Server running on port 3000"));

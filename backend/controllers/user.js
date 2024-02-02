@@ -11,7 +11,7 @@ export function authenticateToken(req, res, next) {
     return res.status(401).json({ message: "Authorization token is missing" });
   }
 
-  jwt.verify(token, JWT_SECRET, (err, user) => {
+  jwt.verify(token, process.env.JWT_SECRET || JWT_SECRET, (err, user) => {
     if (err) {
       return res.status(422).json({ message: "Your session has expired." });
     }
@@ -108,7 +108,7 @@ export async function login(req, res, next) {
         email: userExists.email,
         id: userExists._id,
       },
-      JWT_SECRET,
+      process.env.JWT_SECRET || JWT_SECRET,
       { expiresIn: "1h" }
     );
 
