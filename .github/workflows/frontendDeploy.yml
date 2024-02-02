@@ -47,7 +47,7 @@ jobs:
           name: build
 
       - name: Debug - List Files in dist
-        run: ls -R ./frontend/dist
+        run: ls -R ./
         
       - name: FTP-Deploy-Action
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
