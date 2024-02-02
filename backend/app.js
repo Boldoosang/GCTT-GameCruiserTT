@@ -6,7 +6,7 @@ import cors from "cors";
 const app = express();
 
 const corsOptions = {
-  origin: "https://gctt.justinbaldeo.com",
+  origin: "*",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
 };
