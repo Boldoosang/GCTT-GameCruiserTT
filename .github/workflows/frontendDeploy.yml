@@ -1,10 +1,11 @@
 name: Build and Deploy Frontend to cPanel
-
 on:
   push:
-    branches: [ master ]
+    branches:
+      - main
   pull_request:
-    branches: [ master ]
+    branches:
+      - main
 
 jobs:
   build:
