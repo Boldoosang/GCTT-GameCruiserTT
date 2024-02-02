@@ -45,6 +45,9 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: build
+
+      - name: Debug - List Files in dist
+        run: ls -R ./frontend/dist
         
       - name: FTP-Deploy-Action
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
@@ -53,4 +56,4 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: gctt.justinbaldeo.com/
-          local-dir: ./frontend/dist/
+          local-dir: ./dist/
