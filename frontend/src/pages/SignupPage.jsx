@@ -30,7 +30,7 @@ export default function SignupPage() {
     })
       .then(async (response) => {
         const data = await response.json();
-        console.log(data);
+
         setMessage(data?.message ?? "Unknown error occurred.");
         if (response.status === 422) {
           setMessageStyle("text-red-400");
@@ -38,8 +38,6 @@ export default function SignupPage() {
           return;
         }
 
-        console.log("testsets 1");
-        console.log(message);
         if (!response.ok) {
           setMessageStyle("text-red-400");
 
@@ -47,9 +45,7 @@ export default function SignupPage() {
         }
 
         setIsSubmitting(false);
-        console.log("testsets 2");
         setMessageStyle("text-green-400");
-        console.log("testsets 3");
 
         setTimeout(() => {
           navigate("/login");
@@ -62,10 +58,12 @@ export default function SignupPage() {
       });
     setIsSubmitting(false);
   }
-
+  useEffect(() => {
+    document.title = "GameCruiserTT - Sign Up";
+  });
   return (
     <div className="container mx-auto">
-      <div className="lg:w-[50vw] xs:w-[90vw] mx-auto bg-slate-900/40 rounded-lg p-3 my-3">
+      <div className="lg:w-[50vw] xs:w-[90vw] mx-auto bg-slate-900/40 rounded-lg p-5 my-3">
         <h2 className="text-3xl font-bold text-slate-300">Sign Up</h2>
 
         <p className="text-slate-200 mt-2">
@@ -82,7 +80,7 @@ export default function SignupPage() {
               Your Email
             </label>
             <input
-              className="rounded-sm mt-1 h-8 p-2 bg-slate-800 text-slate-200"
+              className="rounded-sm mt-1 h-10 p-2 bg-slate-800 text-slate-200"
               name="email"
               id="email"
               type="email"
@@ -95,7 +93,7 @@ export default function SignupPage() {
               Password
             </label>
             <input
-              className="rounded-sm mt-1 h-8 p-2 bg-slate-800 text-slate-200"
+              className="rounded-sm mt-1 h-10 p-2 bg-slate-800 text-slate-200"
               type="password"
               name="password"
               id="password"
@@ -111,7 +109,7 @@ export default function SignupPage() {
               Confirm Password
             </label>
             <input
-              className="rounded-sm mt-1 h-8 p-2 bg-slate-800 text-slate-200"
+              className="rounded-sm mt-1 h-10 p-2 bg-slate-800 text-slate-200"
               type="password"
               id="confirm-password"
               name="confirm-password"

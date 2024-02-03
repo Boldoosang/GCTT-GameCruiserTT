@@ -9,6 +9,8 @@ import { useQuery } from "react-query";
 import { motion } from "framer-motion";
 import PageNumbering from "./PageNumbering";
 import PageFlipper from "./PageFlipper";
+import LoadingSpinner from "./LoadingSpinner";
+import ErrorLoader from "./ErrorLoader";
 
 export default function Games({ searchQuery, page, setPage, ordering }) {
   const [wishlist, setWishlist] = useState([]);
@@ -27,7 +29,6 @@ export default function Games({ searchQuery, page, setPage, ordering }) {
   }
 
   async function getGames() {
-    console.log(searchQuery);
     setIsError(false);
     try {
       const response = await fetch(
@@ -63,7 +64,6 @@ export default function Games({ searchQuery, page, setPage, ordering }) {
       setIsLoading(true);
 
       const gamess = await getGames();
-      console.log(gamess);
       setGames(gamess.results);
 
       setIsLoading(false);
@@ -101,53 +101,58 @@ export default function Games({ searchQuery, page, setPage, ordering }) {
 
   return (
     <div className="container mx-auto flex w-full">
-      {isLoading && (
-        <h1 className="text-2xl font-bold text-center mx-auto">Loading...</h1>
-      )}
-      {isError && (
-        <h1 className="text-2xl font-bold text-center text-red-900">
-          An unexpected error has occurred!
-        </h1>
-      )}
-
+      {isLoading && !isError && <LoadingSpinner />}
+      {isError && <ErrorLoader></ErrorLoader>}
       {!isLoading && !isError && games && (
         <div className="flex flex-col w-full">
           {totalPages == 0 && (
-            <h1 className="text-2xl font-bold text-center text-gray-900 my-4">
+            <h1 className="text-2xl font-bold text-center text-gray-100 my-10">
               No results found!
             </h1>
           )}
-          <motion.div
-            variants={{
-              hidden: { opacity: 0 },
-              show: {
-                opacity: 1,
-                transition: { type: "spring", staggerChildren: 0.1 },
-              },
-            }}
-            initial="hidden"
-            animate="show"
-            className="grid lg:grid-cols-3 sm:grid-cols-1 gap-4 w-full"
-          >
-            {games.map((game) => {
-              const isWishlisted = wishlist.some((w) => w.gameId === game.id);
-              return (
-                <GameItem
-                  getWishlistState={getWishlistState}
-                  key={game.id}
-                  game={game}
-                  isWishlisted={isWishlisted}
-                />
-              );
-            })}
-          </motion.div>
+          {totalPages > 0 && (
+            <>
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0 },
+                  show: {
+                    opacity: 1,
+                    transition: { type: "spring", staggerChildren: 0.1 },
+                  },
+                }}
+                initial="hidden"
+                animate="show"
+                className="grid lg:grid-cols-3 sm:grid-cols-1 gap-4 w-full bg-slate-900 p-4 rounded-md shadow-lg outline outline-white outline-1"
+              >
+                {games.map((game) => {
+                  const isWishlisted = wishlist.some(
+                    (w) => w.gameId === game.id
+                  );
+                  return (
+                    <GameItem
+                      getWishlistState={getWishlistState}
+                      key={game.id}
+                      game={game}
+                      isWishlisted={isWishlisted}
+                    />
+                  );
+                })}
+              </motion.div>
 
-          <PageFlipper page={page} setPage={setPage} totalPages={totalPages} />
-          <PageNumbering
-            page={page}
-            totalPages={totalPages}
-            setPage={setPage}
-          />
+              <div className="mt-5">
+                <PageFlipper
+                  page={page}
+                  setPage={setPage}
+                  totalPages={totalPages}
+                />
+                <PageNumbering
+                  page={page}
+                  totalPages={totalPages}
+                  setPage={setPage}
+                />
+              </div>
+            </>
+          )}
         </div>
       )}
     </div>

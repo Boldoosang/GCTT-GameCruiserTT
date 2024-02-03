@@ -9,6 +9,7 @@ const userSchema = new Schema(
       {
         gameId: { type: Number, required: true },
         gameName: { type: String, required: true },
+        backgroundImage: { type: String, required: false },
       },
     ],
   },

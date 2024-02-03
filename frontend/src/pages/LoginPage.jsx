@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { setAuthToken } from "../util/auth";
 import { getBackendURL } from "../util/server";
@@ -52,10 +52,12 @@ export default function LoginPage() {
       });
     setIsSubmitting(false);
   }
-
+  useEffect(() => {
+    document.title = "GameCruiserTT - Login";
+  });
   return (
     <div className="container mx-auto">
-      <div className="lg:w-[50vw] xs:w-[90vw] mx-auto bg-slate-900/40 rounded-lg p-3 my-3">
+      <div className="lg:w-[50vw] xs:w-[90vw] mx-auto bg-slate-900/40 rounded-lg p-5 my-3">
         <h2 className="text-3xl font-bold text-slate-300">Login</h2>
         <p className="text-slate-200 mt-2">
           Please login to GameCruiserTT with your credentials.
@@ -77,7 +79,7 @@ export default function LoginPage() {
                 type="email"
                 required={true}
                 placeholder="name@mail.com"
-                className="rounded-sm mt-1 h-8 p-2 bg-slate-800 text-slate-200"
+                className="rounded-sm mt-1 h-10 p-2 bg-slate-800 text-slate-200"
               />
             </div>
             <div className="w-full flex flex-col mb-3">
@@ -90,7 +92,7 @@ export default function LoginPage() {
                 id="password"
                 required={true}
                 placeholder="********"
-                className="rounded-sm mt-1 h-8 p-2 bg-slate-800 text-slate-200"
+                className="rounded-sm mt-1 h-10 p-2 bg-slate-800 text-slate-200"
               />
             </div>
           </div>

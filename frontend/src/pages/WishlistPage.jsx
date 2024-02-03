@@ -5,10 +5,13 @@ import { toast } from "react-toastify";
 import { getAuthToken } from "../util/auth";
 import WishlistItem from "../components/WishlistItem";
 import { motion } from "framer-motion";
+import ErrorLoader from "../components/ErrorLoader";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function WishlistPage() {
   const [wishlist, setWishlist] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
 
   async function getWishlistState() {
     setIsLoading(true);
@@ -30,6 +33,7 @@ export default function WishlistPage() {
       setWishlist(data.wishlist);
       return;
     } catch (err) {
+      setIsError(true);
       console.log(err);
       return [];
     } finally {
@@ -41,14 +45,24 @@ export default function WishlistPage() {
     getWishlistState();
   }, []);
 
+  useEffect(() => {
+    document.title = "GameCruiserTT - Wishlist";
+  });
+
   return (
-    <div className="container mx-auto my-5 p-3 bg-slate-200/50 rounded-lg ">
-      <h2 className="text-3xl font-bold text-center">Wishlist</h2>
+    <div className="container mx-auto my-5 p-5 bg-slate-800/50 rounded-sm shadow-lg outline-1 outline-black outline py-5">
+      <h2 className="text-3xl tracking-widest font-bold text-center text-slate-100 ">
+        Wishlist
+      </h2>
       <hr className="my-3"></hr>
-      {isLoading ? (
-        <h1 className="text-center font-bold text-xl">Loading...</h1>
+      {isError ? (
+        <ErrorLoader />
+      ) : isLoading ? (
+        <LoadingSpinner />
       ) : wishlist.length <= 0 ? (
-        <h1 className="text-center font-bold text-xl">No items in wishlist.</h1>
+        <h1 className="text-center font-bold text-xl text-neutral-200 my-10">
+          No items in wishlist.
+        </h1>
       ) : (
         <motion.div
           layout

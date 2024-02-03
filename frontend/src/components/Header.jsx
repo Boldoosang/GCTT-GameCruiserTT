@@ -1,9 +1,9 @@
 import React from "react";
-
+import { BsFillHouseFill } from "react-icons/bs";
 import { NavLink, useRouteLoaderData } from "react-router-dom";
 import { clearToken } from "../util/auth";
 import { motion } from "framer-motion";
-
+import logo from "../assets/logo.png";
 export default function Header() {
   const userToken = useRouteLoaderData("root");
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -19,11 +19,22 @@ export default function Header() {
 
   return (
     <motion.header className="bg-slate-800 shadow-lg">
-      <nav className="container mx-auto py-6 flex flex-wrap items-center justify-between">
+      <nav className="container mx-auto py-6 flex flex-wrap items-center justify-between px-2">
         <NavLink
-          className="font-bold text-3xl tracking-wider text-gray-200 hover:text-gray-500 transition"
+          className="font-bold text-3xl tracking-wider text-gray-200 hover:text-gray-500 transition flex-row flex items-center gap-3"
           to="/games?page=1"
         >
+          <motion.img
+            src={logo}
+            className="w-full h-16"
+            variants={{
+              hidden: { opacity: 0, scale: 0.5 },
+              show: { opacity: 1, scale: 1 },
+            }}
+            initial="hidden"
+            animate="show"
+            transition={{ duration: 0.5 }}
+          />
           GameCruiserTT
         </NavLink>
 

@@ -124,9 +124,11 @@ function addToWishlist(req, res, next) {
     .then((user) => {
       let gameId;
       let gameName;
+      let backgroundImage;
       try {
         gameId = parseInt(req.body.gameId);
         gameName = req.body.gameName;
+        backgroundImage = req.body.backgroundImage;
 
         if (!gameId || !gameName)
           return res.status(400).json({ message: "Invalid game details" });
@@ -137,7 +139,7 @@ function addToWishlist(req, res, next) {
             .json({ message: "Game already exists in wishlist" });
         }
 
-        user.wishlist.push({ gameId, gameName });
+        user.wishlist.push({ gameId, gameName, backgroundImage });
         user.save().then((user) => {
           res
             .status(201)
@@ -226,6 +228,9 @@ function getWishlistItem(req, res, next) {
           gameName: user.wishlist.find(
             (game) => game.gameId === parseInt(gameId)
           ).gameName,
+          backgroundImage: user.wishlist.find(
+            (game) => game.gameId === parseInt(gameId)
+          ).backgroundImage,
         },
       });
     })

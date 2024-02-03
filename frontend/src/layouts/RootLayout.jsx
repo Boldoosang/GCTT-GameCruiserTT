@@ -6,11 +6,18 @@ import { ToastContainer } from "react-toastify";
 
 export default function RootLayout() {
   return (
-    <div className="bg-slate-600 min-h-screen flex flex-col">
-      <ToastContainer />
+    <div className="bg-slate-700 min-h-screen flex flex-col">
+      <ToastContainer
+        pauseOnFocusLoss={false}
+        pauseOnHover={false}
+        closeOnClick={true}
+        autoClose={1500}
+        theme="dark"
+        position="bottom-right"
+      />
       <Header />
 
-      <main>
+      <main className="px-1">
         <Outlet />
       </main>
 

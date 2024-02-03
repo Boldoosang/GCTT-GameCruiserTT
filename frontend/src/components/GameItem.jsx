@@ -14,13 +14,22 @@ function GameItem({ game, isWishlisted, getWishlistState }) {
   const navigate = useNavigate();
   const [isUpdating, setIsUpdating] = useState(false);
 
-  async function handleUpdateWishlist(gameId, gameName, method) {
+  async function handleUpdateWishlist(
+    gameId,
+    gameName,
+    background_image,
+    method
+  ) {
     setIsUpdating(() => true);
 
     try {
       const response = await fetch(`${getBackendURL()}/user/wishlist`, {
         method: method,
-        body: JSON.stringify({ gameId, gameName }),
+        body: JSON.stringify({
+          gameId,
+          gameName,
+          backgroundImage: background_image,
+        }),
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${userToken}`,
@@ -59,22 +68,22 @@ function GameItem({ game, isWishlisted, getWishlistState }) {
           hidden: { opacity: 0, x: -40 },
           show: { opacity: 1, x: 0 },
         }}
-        className="bg-gray-50 rounded-md p-2 flex flex-col shadow-lg"
+        className="bg-neutral-800 rounded-md p-2 flex flex-col shadow-lg outline outline-black outline-1"
       >
         <div>
           <img
             src={
               game.background_image ? game.background_image : placeholderImage
             }
-            className="shadow-lg rounded-md object-cover w-full lg:h-48 sm:h-70"
+            className="shadow-lg rounded-md object-cover w-full lg:h-48 sm:h-70 outline outline-1 outline-black"
           />
         </div>
         <div className="mt-2 mb-auto px-2">
-          <p className="font-bold">{game.name}</p>
+          <p className="font-bold text-neutral-300">{game.name}</p>
         </div>
         <div className="grid auto-cols-auto gap-1 mt-3">
           <button
-            className="bg-blue-500 outline rounded-sm p-1 py-2 text-white"
+            className="bg-blue-500 hover:bg-blue-700 rounded-sm p-1 py-2 text-white"
             onClick={() => navigate("/games/" + game.id)}
           >
             Game Details
@@ -84,7 +93,7 @@ function GameItem({ game, isWishlisted, getWishlistState }) {
             <button
               className={`${
                 userToken
-                  ? " bg-green-700 text-white "
+                  ? " bg-green-700 text-white hover:bg-green-900"
                   : "bg-gray-300 text-black "
               } rounded-sm p-1 py-2 `}
               disabled={userToken ? false : true}
@@ -99,14 +108,15 @@ function GameItem({ game, isWishlisted, getWishlistState }) {
                 isUpdating
                   ? "bg-gray-500 text-white"
                   : !isWishlisted
-                  ? " bg-green-700 text-white "
-                  : "bg-red-700 text-white "
+                  ? " bg-green-700 text-white hover:bg-green-900"
+                  : "bg-red-700 text-white hover:bg-red-900"
               } p-1 py-2 rounded-sm`}
               disabled={isUpdating}
               onClick={() =>
                 handleUpdateWishlist(
                   game.id,
                   game.name,
+                  game.background_image,
                   `${isWishlisted ? "DELETE" : "POST"}`
                 )
               }

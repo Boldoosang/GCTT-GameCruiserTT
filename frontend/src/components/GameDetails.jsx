@@ -7,6 +7,8 @@ import { DUMMY_DETAILS, DUMMY_GAMES } from "./dummygames";
 import { useRouteLoaderData, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import LoadingSpinner from "./LoadingSpinner";
+import ErrorLoader from "./ErrorLoader";
 
 function GameDetails() {
   const params = useParams();
@@ -102,13 +104,22 @@ function GameDetails() {
     getWishlistItemState();
   }, [handleUpdateWishlist]);
 
-  async function handleUpdateWishlist(gameId, gameName, method) {
+  async function handleUpdateWishlist(
+    gameId,
+    gameName,
+    background_image,
+    method
+  ) {
     setIsUpdating(() => true);
 
     try {
       const response = await fetch(`${getBackendURL()}/user/wishlist`, {
         method: method,
-        body: JSON.stringify({ gameId, gameName }),
+        body: JSON.stringify({
+          gameId,
+          gameName,
+          backgroundImage: background_image,
+        }),
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${userToken}`,
@@ -137,17 +148,14 @@ function GameDetails() {
       setIsUpdating(() => false);
     }
   }
+  useEffect(() => {
+    document.title = "GameCruiserTT - Game Details";
+  });
 
   return (
-    <div className="container mx-auto my-5 p-3 bg-slate-200/50 rounded-lg flex flex-col">
-      {isLoading && (
-        <h1 className="text-2xl font-bold text-center">Loading...</h1>
-      )}
-      {isError && (
-        <h1 className="text-2xl font-bold text-center text-red-900">
-          An unexpected error has occurred!
-        </h1>
-      )}
+    <div className="container mx-auto my-5 p-5 bg-slate-800/50 rounded-sm shadow-lg outline-1 outline-black outline py-8 text-neutral-300">
+      {isLoading && <LoadingSpinner />}
+      {isError && <ErrorLoader />}
       {!isLoading && !isError && gameDetails && (
         <>
           <img
@@ -165,7 +173,7 @@ function GameDetails() {
             <button
               className={`${
                 userToken
-                  ? " bg-green-700 text-white "
+                  ? " bg-green-700 text-white hover:bg-green-900"
                   : "bg-gray-300 text-black "
               } py-2 rounded-sm ml-auto w-full `}
               disabled={userToken ? false : true}
@@ -179,14 +187,15 @@ function GameDetails() {
                 isUpdating
                   ? "bg-gray-500 text-white"
                   : !isWishlisted
-                  ? " bg-green-700 text-white "
-                  : "bg-red-700 text-white "
+                  ? " bg-green-700 text-white hover:bg-green-900"
+                  : "bg-red-700 text-white hover:bg-red-900"
               } py-2 rounded-sm ml-auto w-full`}
               disabled={userToken ? false : true}
               onClick={() =>
                 handleUpdateWishlist(
                   gameId,
                   gameDetails.name,
+                  gameDetails.background_image,
                   `${isWishlisted ? "DELETE" : "POST"}`
                 )
               }
@@ -199,11 +208,13 @@ function GameDetails() {
             </button>
           )}
           <hr className="my-2"></hr>
-          <h1 className="text-3xl font-bold mb-2">{gameDetails.name}</h1>
+          <h1 className="text-3xl font-bold mb-2 text-neutral-100">
+            {gameDetails.name}
+          </h1>
           <p>{gameDetails.description_raw}</p>
           <div className="mt-3">
             <p>
-              <span className="font-bold">Release Date: </span>
+              <span className="font-bold text-neutral-100">Release Date: </span>
               {gameDetails.released
                 ? new Date(gameDetails.released).toDateString()
                 : "Not stated"}
@@ -212,7 +223,7 @@ function GameDetails() {
           {gameDetails?.platforms.length > 0 && (
             <div className="mt-3">
               <p>
-                <span className="font-bold">Platforms: </span>
+                <span className="font-bold text-neutral-100">Platforms: </span>
               </p>
               <ul>
                 {gameDetails.platforms.map((platform) => {
@@ -226,7 +237,7 @@ function GameDetails() {
           {gameDetails?.publishers.length > 0 && (
             <div className="mt-3">
               <p>
-                <span className="font-bold">Publishers: </span>
+                <span className="font-bold text-neutral-100">Publishers: </span>
               </p>
               <ul>
                 {gameDetails.publishers.map((publisher) => {
@@ -238,7 +249,7 @@ function GameDetails() {
           {gameDetails?.tags.length > 0 && (
             <div className="mt-3">
               <p>
-                <span className="font-bold">Tags: </span>
+                <span className="font-bold text-neutral-100">Tags: </span>
               </p>
               <ul>
                 {gameDetails.tags.map((tag) => {
@@ -250,7 +261,7 @@ function GameDetails() {
           {gameDetails?.genres.length > 0 && (
             <div className="mt-3">
               <p>
-                <span className="font-bold">Genres: </span>
+                <span className="font-bold text-neutral-100">Genres: </span>
               </p>
               <ul>
                 {gameDetails.genres.map((genre) => {
@@ -262,7 +273,7 @@ function GameDetails() {
           {gameDetails?.developers.length > 0 && (
             <div className="mt-3">
               <p>
-                <span className="font-bold">Developers: </span>
+                <span className="font-bold text-neutral-100">Developers: </span>
               </p>
               <ul>
                 {gameDetails.developers.map((developers) => {
@@ -274,7 +285,7 @@ function GameDetails() {
           {gameDetails?.esrb_rating && (
             <div className="mt-3">
               <p>
-                <span className="font-bold">Rating: </span>
+                <span className="font-bold text-neutral-100">Rating: </span>
               </p>
               <h1>{gameDetails.esrb_rating.name}</h1>
             </div>

@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import "./index.css";
 import { motion, AnimatePresence } from "framer-motion";
 
+document.title = "GameCruiserTT";
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")).render(

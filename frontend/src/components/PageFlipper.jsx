@@ -9,7 +9,7 @@ function PageFlipper({ page, setPage, totalPages }) {
         }}
         disabled={page <= 1}
         className={` text-white w-full py-2  rounded-md ${
-          page <= 1 ? "bg-gray-500 " : "bg-slate-900"
+          page <= 1 ? "bg-gray-500 " : "bg-slate-900 hover:bg-slate-700"
         }`}
       >
         Previous Page
@@ -18,7 +18,9 @@ function PageFlipper({ page, setPage, totalPages }) {
         onClick={() => (page < totalPages ? setPage((prev) => prev + 1) : null)}
         disabled={page >= totalPages}
         className={` text-white w-full py-2  rounded-md ${
-          page < totalPages ? "bg-blue-500 " : "bg-gray-500"
+          page < totalPages
+            ? "bg-indigo-500 hover:bg-indigo-700"
+            : "bg-gray-500"
         }`}
       >
         Next Page
