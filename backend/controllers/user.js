@@ -2,7 +2,6 @@ const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { User } = require("../models/user.js");
-const { JWT_SECRET } = require("../config/config.js");
 
 function authenticateToken(req, res, next) {
   let token = req.headers.authorization;
@@ -11,7 +10,7 @@ function authenticateToken(req, res, next) {
     return res.status(401).json({ message: "Authorization token is missing" });
   }
 
-  jwt.verify(token, JWT_SECRET, (err, user) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err) {
       return res.status(422).json({ message: "Your session has expired." });
     }
@@ -108,7 +107,7 @@ async function login(req, res, next) {
         email: userExists.email,
         id: userExists._id,
       },
-      JWT_SECRET,
+      process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
 
