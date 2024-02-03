@@ -22,7 +22,6 @@ function GameDetails() {
   const [isLoading, setIsLoading] = useState(true);
 
   async function altgetGameDetails() {
-    console.log(params.gameId);
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve(DUMMY_DETAILS);
@@ -61,7 +60,6 @@ function GameDetails() {
       setIsLoading(true);
 
       const gameDet = await getGameDetails();
-      console.log(gameDet);
       setGameDetails(gameDet);
 
       setIsLoading(false);
